@@ -1,0 +1,8 @@
+1º Para criar a aplicação com o comando:
+
+yarn init -y
+
+
+2º Adicionar o express
+
+yarn add express
