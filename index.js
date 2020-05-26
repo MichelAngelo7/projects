@@ -23,6 +23,14 @@ function checkTitleExists(req, res, next){
     return next();
 }
 
+function checkTaskExists(req, res, next){
+    if(!req.body.task){
+        return res.status(400).json({ error: 'Task is rquired' })
+    }
+
+    return next();
+}
+
 function checkTaskInArray(req, res, next){
     const task = tasks[req.params.id];
     if(!task){
@@ -33,7 +41,6 @@ function checkTaskInArray(req, res, next){
     return next();
 }
 
-
 server.get('/projects', (req, res)=>{
     
    return res.json(tasks); 
@@ -43,33 +50,26 @@ server.get('/projects/:id', checkTaskInArray, (req, res)=>{
     return res.json(req.task);
 });
 
-
 server.post('/projects',checkTitleExists, (req, res)=>{
     const { id } = req.body;
     const { title } = req.body;
 
     
-    tasks.push({id: id, title:title, tasks:[' '] });
+    tasks.push({id: id, title:title, tasks:['Nova tarefa'] });
 
     return res.json(tasks);
 
 });
 
-
-
-
-server.post('/projects/:id/tasks', (req, res)=>{
+server.post('/projects/:id/tasks',checkTaskExists, (req, res)=>{
     const { id } = req.params;
-    const { title } = req.body;
     const { task } = req.body;
 
     
-    tasks.push({id: id, title:title, task:task})
+    tasks.push({id: id, title:['Novo projeto'], task:task})
 
     return res.json(tasks);
 });
-
-
 
 server.put('/projects/:id', checkTaskInArray, (req, res)=>{
     const { id } = req.params;
@@ -89,8 +89,5 @@ server.delete('/projects/:id', checkTaskInArray, (req, res)=>{
     return res.send();
 
 });
-
-
-
 
 server.listen(3000);
